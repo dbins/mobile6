@@ -12,8 +12,7 @@ var destinationType; // sets the format of returned value
 document.addEventListener("deviceready", onDeviceReady, false);
 	 
 function onDeviceReady() {
-    pictureSource = navigator.camera.PictureSourceType;
-    destinationType = navigator.camera.DestinationType;
+  
 	isPhoneGapReady = true;
 	// detect for network access
 	networkDetection();
@@ -34,6 +33,15 @@ function onDeviceReady() {
 	celular_versao = device.version;
 	$("#deviceproperties").append(conteudo);
 	
+	pictureSource = navigator.camera.PictureSourceType;
+    destinationType = navigator.camera.DestinationType;
+	
+}
+
+
+// alert dialog dismissed
+function alertDismissed() {
+	// do something
 }
 
 function networkDetection() {
@@ -74,7 +82,7 @@ function clearCache() {
 	    var win = function (r) {
 	        clearCache();
 	        retries = 0;
-	        alert('Concluido!');
+	        navigator.notification.alert('Concluido! A foto foi enviada para nosso servidor!', alertDismissed, 'Enviar Foto', 'OK');
 			$.mobile.changePage("#main");
 	    }
 	 
@@ -87,7 +95,7 @@ function clearCache() {
 	        } else {
 	            retries = 0;
 	            clearCache();
-	            alert('Ocorreu um problema!');
+	            navigator.notification.alert('Ocorreu um problema!', alertDismissed, 'Enviar Foto', 'OK');
 				$.mobile.changePage("#main");
 	        }
 	    }
@@ -109,7 +117,7 @@ function clearCache() {
 	}
 	 
 	function onFail(message) {
-	    alert('Ocorreu o seguinte erro: ' + message);
+	    navigator.notification.alert('Ocorreu o seguinte erro: ' + message, alertDismissed, 'Enviar Foto', 'OK');
 	}
 	
 	
@@ -118,11 +126,11 @@ function clearCache() {
 			if (isConnected) {
 				capturePhoto();
 			} else {
-				alert('Não existe conexão com a Internet');
+				navigator.notification.alert('Não existe conexão com a Internet', alertDismissed, 'Enviar Foto', 'OK');
 				$.mobile.changePage("#main");
 			}				
 		} else {
-			alert('O aplicativo não está pronto!');
+			navigator.notification.alert('O aplicativo não está pronto!', alertDismissed, 'Enviar Foto', 'OK');
 			$.mobile.changePage("#main");
 		}
 	});
