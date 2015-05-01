@@ -12,7 +12,8 @@ var destinationType; // sets the format of returned value
 document.addEventListener("deviceready", onDeviceReady, false);
 	 
 function onDeviceReady() {
-  
+    pictureSource = navigator.camera.PictureSourceType;
+    destinationType = navigator.camera.DestinationType;
 	isPhoneGapReady = true;
 	// detect for network access
 	networkDetection();
@@ -33,8 +34,7 @@ function onDeviceReady() {
 	celular_versao = device.version;
 	$("#deviceproperties").append(conteudo);
 	
-	pictureSource = navigator.camera.PictureSourceType;
-    destinationType = navigator.camera.DestinationType;
+	
 	
 }
 
