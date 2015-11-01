@@ -8,6 +8,51 @@ var isConnected = false;
 var isHighSpeed = false;
 var pictureSource;   // picture source
 var destinationType; // sets the format of returned value
+var email_aplicativo;
+
+function echeck(str) {
+	var at="@"
+	var dot="."
+	var lat=str.indexOf(at)
+	var lstr=str.length
+	var ldot=str.indexOf(dot)
+	if (str.indexOf(at)==-1){
+	   //alert("Invalid E-mail ID")
+	   return false
+	}
+
+	if (str.indexOf(at)==-1 || str.indexOf(at)==0 || str.indexOf(at)==lstr){
+	   //alert("Invalid E-mail ID")
+	   return false
+	}
+
+	if (str.indexOf(dot)==-1 || str.indexOf(dot)==0 || str.indexOf(dot)==lstr){
+		//alert("Invalid E-mail ID")
+		return false
+	}
+
+	 if (str.indexOf(at,(lat+1))!=-1){
+		//alert("Invalid E-mail ID")
+		return false
+	 }
+
+	 if (str.substring(lat-1,lat)==dot || str.substring(lat+1,lat+2)==dot){
+		//alert("Invalid E-mail ID")
+		return false
+	 }
+
+	 if (str.indexOf(dot,(lat+2))==-1){
+		//alert("Invalid E-mail ID")
+		return false
+	 }
+	
+	 if (str.indexOf(" ")!=-1){
+		//alert("Invalid E-mail ID")
+		return false
+	 }
+
+	 return true					
+}
 	 
 document.addEventListener("deviceready", onDeviceReady, false);
 	 
@@ -104,7 +149,13 @@ function clearCache() {
 	    options.fileKey = "recFile";
 	    options.fileName = fileURI.substr(fileURI.lastIndexOf('/') + 1);
 	    options.mimeType = "image/jpeg";
-	    options.params = {}; // if we need to send parameters to the server request
+		
+		var params = new Object();
+        params.email = email_aplicativo;
+        
+	    //options.params = {}; // if we need to send parameters to the server request
+		options.params = params;
+		
 	    var ft = new FileTransfer();
 	    ft.upload(fileURI, encodeURI("http://www.gotasdecidadania.com.br/novo/programado/upload_foto.php"), win, fail, options);
 	}
@@ -119,6 +170,33 @@ function clearCache() {
 	function onFail(message) {
 	    navigator.notification.alert('Ocorreu o seguinte erro: ' + message, alertDismissed, 'Enviar Foto', 'OK');
 	}
+	
+	$(document).on('pageinit', '#pageone', function(){ 
+		$(document).on('click', '#enviar_contato', function() { // catch the form's submit event
+		
+			var continuar = true;
+			var mensagem ="Ocorreram os seguintes erros:\n";
+			
+			if ($('#email_contato').val() == "") {
+				mensagem = mensagem +  'Digite o endereco de e-mail\n';
+				continuar = false;
+			} else {
+				if (echeck($('#email_contato').val())==false){
+				mensagem = mensagem + 'Preencha corretamente o endereco de e-mail\n';
+				continuar = false;
+				}
+			}
+
+			if (continuar){
+				email_aplicativo = $('#email_contato').val();
+				$.mobile.changePage("#foto");
+			} else {
+				alert(mensagem);
+			}
+			return false; // cancel original event to prevent form submitting
+	 
+		});
+	});
 	
 	
 	$(document).on('pageshow', '#foto', function(){ 
