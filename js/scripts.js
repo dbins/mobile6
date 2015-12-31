@@ -137,7 +137,7 @@ function clearCache() {
 	        clearCache();
 	        retries = 0;
 	        //navigator.notification.alert('Concluido! A foto foi enviada para nosso servidor!', alertDismissed, 'Enviar Foto', 'OK');
-			navigator.notification.confirm( 'Concluido! A foto foi enviada para nosso servidor! Deseja enviar outra foto?', AlertConfirmed, 'Enviar Foto', ['OK, CANCELAR']);
+			navigator.notification.confirm( 'Concluido! A foto foi enviada para nosso servidor! Deseja enviar outra foto?', AlertConfirmed, 'Enviar Foto', ['OK', 'SAIR']);
 			//$.mobile.changePage("#main");
 	    }
 	 
