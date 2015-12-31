@@ -212,7 +212,7 @@ function clearCache() {
 	});
 	
 	
-	$(document).on('pageinit', '#foto', function(){ 
+	$(document).on('pageshow', '#foto', function(){ 
 		if (isPhoneGapReady){
 			if (isConnected) {
 				capturePhoto();
