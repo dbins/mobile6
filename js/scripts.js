@@ -212,7 +212,8 @@ function clearCache() {
 	});
 	
 	
-	$(document).on('pageshow', '#foto', function(){ 
+	$(document).on('pageshow', '#foto', function(){
+		$('#content_news').text('Aguarde o seu dispositivo abrir a câmera para tirar a foto.');		
 		if (isPhoneGapReady){
 			if (isConnected) {
 				capturePhoto();
