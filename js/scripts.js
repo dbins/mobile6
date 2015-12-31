@@ -91,7 +91,18 @@ function alertDismissed() {
 
 function AlertConfirmed(buttonIndex) {
 	if (buttonIndex ==1){ //OK
-		$.mobile.changePage("#foto");
+		$('#content_news').text('Aguarde o seu dispositivo abrir a câmera para tirar a foto.');	
+		if (isPhoneGapReady){
+			if (isConnected) {
+				capturePhoto();
+			} else {
+				navigator.notification.alert('Não existe conexão com a Internet', alertDismissed, 'Enviar Foto', 'OK');
+				$.mobile.changePage("#main");
+			}				
+		} else {
+			navigator.notification.alert('O aplicativo não está pronto!', alertDismissed, 'Enviar Foto', 'OK');
+			$.mobile.changePage("#main");
+		}
 	}
 	if (buttonIndex ==2){ //Cancelar
 		$.mobile.changePage("#pageone");
@@ -213,7 +224,6 @@ function clearCache() {
 	
 	
 	$(document).on('pageshow', '#foto', function(){
-		$('#content_news').text('Aguarde o seu dispositivo abrir a câmera para tirar a foto.');		
 		if (isPhoneGapReady){
 			if (isConnected) {
 				capturePhoto();
