@@ -89,6 +89,15 @@ function alertDismissed() {
 	// do something
 }
 
+function AlertConfirmed(buttonIndex) {
+	if (buttonIndex ==1){ //OK
+		$.mobile.changePage("#foto");
+	}
+	if (buttonIndex ==2){ //Cancelar
+		$.mobile.changePage("#pageone");
+	}
+}
+
 function networkDetection() {
 	if (isPhoneGapReady) {
 		// as long as the connection type is not none,
@@ -127,8 +136,9 @@ function clearCache() {
 	    var win = function (r) {
 	        clearCache();
 	        retries = 0;
-	        navigator.notification.alert('Concluido! A foto foi enviada para nosso servidor!', alertDismissed, 'Enviar Foto', 'OK');
-			$.mobile.changePage("#main");
+	        //navigator.notification.alert('Concluido! A foto foi enviada para nosso servidor!', alertDismissed, 'Enviar Foto', 'OK');
+			navigator.notification.confirm( 'Concluido! A foto foi enviada para nosso servidor! Deseja enviar outra foto?', AlertConfirmed, 'Enviar Foto', ['OK, CANCELAR']);
+			//$.mobile.changePage("#main");
 	    }
 	 
 	    var fail = function (error) {
@@ -144,6 +154,9 @@ function clearCache() {
 				$.mobile.changePage("#main");
 	        }
 	    }
+		
+		
+		$('#content_news').text('Aguarde, a foto está sendo enviada para o nosso servidor!');
 	 
 	    var options = new FileUploadOptions();
 	    options.fileKey = "recFile";
@@ -199,7 +212,7 @@ function clearCache() {
 	});
 	
 	
-	$(document).on('pageshow', '#foto', function(){ 
+	$(document).on('pageinit', '#foto', function(){ 
 		if (isPhoneGapReady){
 			if (isConnected) {
 				capturePhoto();
