@@ -76,7 +76,7 @@ function onDeviceReady() {
 	conteudo = conteudo + 'UUID: '     + device.uuid     + '<br />';
 	conteudo = conteudo + 'Versão: '  + device.version  + '<br />';
 	conteudo = conteudo + 'Bateria: '  + status_bateria  + '<br />';
-	conteudo = conteudo + 'Tipo de conexão: '  + tipo_conexao  + '<br />';
+	//conteudo = conteudo + 'Tipo de conexão: '  + tipo_conexao  + '<br />';
 			
 	celular_modelo = device.model;
 	celular_plataforma = device.platform;
@@ -120,25 +120,25 @@ function networkDetection() {
 	if (isPhoneGapReady) {
 		// as long as the connection type is not none,
 		// the device should have Internet access
-		var states = {};
-		states[navigator.connection.UNKNOWN]  = 'Unknown connection';
-		states[navigator.connection.ETHERNET] = 'Ethernet connection';
-		states[navigator.connection.WIFI]     = 'WiFi connection';
-		states[navigator.connection.CELL_2G]  = 'Cell 2G connection';
-		states[navigator.connection.CELL_3G]  = 'Cell 3G connection';
-		states[navigator.connection.CELL_4G]  = 'Cell 4G connection';
-		states[navigator.connection.NONE]     = 'No network connection';
-		tipo_conexao = states[navigator.connection.type];
+		//var states = {};
+		//states[navigator.connection.UNKNOWN]  = 'Unknown connection';
+		//states[navigator.connection.ETHERNET] = 'Ethernet connection';
+		//states[navigator.connection.WIFI]     = 'WiFi connection';
+		//states[navigator.connection.CELL_2G]  = 'Cell 2G connection';
+		//states[navigator.connection.CELL_3G]  = 'Cell 3G connection';
+		//states[navigator.connection.CELL_4G]  = 'Cell 4G connection';
+		//states[navigator.connection.NONE]     = 'No network connection';
+		//tipo_conexao = states[navigator.connection.type];
 				
-		if (tipo_conexao != 'No network connection') {
-			isConnected = true;
-		}
+		//if (tipo_conexao != 'No network connection') {
+		//	isConnected = true;
+		//}
 		// determine whether this connection is high-speed
-		if (tipo_conexao == 'Unknown connection' || tipo_conexao == 'Cell 2G connection') {
-			isHighSpeed = false;
-		} else {
-			isHighSpeed = true;
-		}
+		//if (tipo_conexao == 'Unknown connection' || tipo_conexao == 'Cell 2G connection') {
+		//	isHighSpeed = false;
+		//} else {
+		//	isHighSpeed = true;
+		//}
 
 	}
 }
