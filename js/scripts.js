@@ -191,8 +191,8 @@ function clearCache() {
 		
 		var params = new Object();
         params.email = email_aplicativo;
-		params.latitude = latitude;
-		params.longitude = longitude;
+		//params.latitude = latitude;
+		//params.longitude = longitude;
         
 	    //options.params = {}; // if we need to send parameters to the server request
 		options.params = params;
