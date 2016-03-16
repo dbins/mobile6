@@ -245,12 +245,12 @@ function clearCache() {
 		if (isPhoneGapReady){
 			if (isConnected) {
 				//obter posicao
-				var options = {
-				maximumAge: 3000,
-				timeout: 5000,
-				enableHighAccuracy: true
-				};
-				navigator.geolocation.getCurrentPosition(ObterCoordenadas, geoError, options);
+				//var options = {
+				//maximumAge: 3000,
+				//timeout: 5000,
+				//enableHighAccuracy: false
+				//};
+				//navigator.geolocation.getCurrentPosition(ObterCoordenadas, geoError, options);
 				
 				
 				capturePhoto();
