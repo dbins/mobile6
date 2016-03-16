@@ -1,3 +1,4 @@
+//http://www.javascriptlint.com/online_lint.php
 //Funcoes especificas do Phonegap
 var celular_modelo = "";	
 var celular_plataforma = "";
@@ -6,52 +7,55 @@ var celular_versao = "";
 var isPhoneGapReady = false;
 var isConnected = false;
 var isHighSpeed = false;
+var tipo_conexao = "";
 var pictureSource;   // picture source
 var destinationType; // sets the format of returned value
 var email_aplicativo;
+var latitude = "";
+var longitude = "";
 
 function echeck(str) {
-	var at="@"
-	var dot="."
-	var lat=str.indexOf(at)
-	var lstr=str.length
-	var ldot=str.indexOf(dot)
+	var at="@";
+	var dot=".";
+	var lat=str.indexOf(at);
+	var lstr=str.length;
+	var ldot=str.indexOf(dot);
 	if (str.indexOf(at)==-1){
-	   //alert("Invalid E-mail ID")
-	   return false
+	   //alert("Invalid E-mail ID");
+	   return false;
 	}
 
 	if (str.indexOf(at)==-1 || str.indexOf(at)==0 || str.indexOf(at)==lstr){
-	   //alert("Invalid E-mail ID")
-	   return false
+	   //alert("Invalid E-mail ID");
+	   return false;
 	}
 
 	if (str.indexOf(dot)==-1 || str.indexOf(dot)==0 || str.indexOf(dot)==lstr){
-		//alert("Invalid E-mail ID")
-		return false
+		//alert("Invalid E-mail ID");
+		return false;
 	}
 
 	 if (str.indexOf(at,(lat+1))!=-1){
-		//alert("Invalid E-mail ID")
-		return false
+		//alert("Invalid E-mail ID");
+		return false;
 	 }
 
 	 if (str.substring(lat-1,lat)==dot || str.substring(lat+1,lat+2)==dot){
-		//alert("Invalid E-mail ID")
-		return false
+		//alert("Invalid E-mail ID");
+		return false;
 	 }
 
 	 if (str.indexOf(dot,(lat+2))==-1){
-		//alert("Invalid E-mail ID")
+		//alert("Invalid E-mail ID");
 		return false
 	 }
 	
 	 if (str.indexOf(" ")!=-1){
-		//alert("Invalid E-mail ID")
-		return false
+		//alert("Invalid E-mail ID");
+		return false;
 	 }
 
-	 return true					
+	 return true;
 }
 	 
 document.addEventListener("deviceready", onDeviceReady, false);
@@ -72,6 +76,7 @@ function onDeviceReady() {
 	conteudo = conteudo + 'UUID: '     + device.uuid     + '<br />';
 	conteudo = conteudo + 'Versão: '  + device.version  + '<br />';
 	conteudo = conteudo + 'Bateria: '  + status_bateria  + '<br />';
+	conteudo = conteudo + 'Tipo de conexão: '  + tipo_conexao  + '<br />';
 			
 	celular_modelo = device.model;
 	celular_plataforma = device.platform;
@@ -96,10 +101,12 @@ function AlertConfirmed(buttonIndex) {
 			if (isConnected) {
 				capturePhoto();
 			} else {
+				navigator.vibrate(2000);
 				navigator.notification.alert('Não existe conexão com a Internet', alertDismissed, 'Enviar Foto', 'OK');
 				$.mobile.changePage("#main");
 			}				
 		} else {
+			navigator.vibrate(2000);
 			navigator.notification.alert('O aplicativo não está pronto!', alertDismissed, 'Enviar Foto', 'OK');
 			$.mobile.changePage("#main");
 		}
@@ -113,19 +120,26 @@ function networkDetection() {
 	if (isPhoneGapReady) {
 		// as long as the connection type is not none,
 		// the device should have Internet access
-		if (navigator.network.connection.type != Connection.NONE) {
+		var states = {};
+		states[navigator.connection.UNKNOWN]  = 'Unknown connection';
+		states[navigator.connection.ETHERNET] = 'Ethernet connection';
+		states[navigator.connection.WIFI]     = 'WiFi connection';
+		states[navigator.connection.CELL_2G]  = 'Cell 2G connection';
+		states[navigator.connection.CELL_3G]  = 'Cell 3G connection';
+		states[navigator.connection.CELL_4G]  = 'Cell 4G connection';
+		states[navigator.connection.NONE]     = 'No network connection';
+		tipo_conexao = states[navigator.connection.type];
+				
+		if (tipo_conexao != 'No network connection') {
 			isConnected = true;
 		}
 		// determine whether this connection is high-speed
-		switch (navigator.network.connection.type) {
-			case Connection.UNKNOWN:
-			case Connection.CELL_2G:
-				isHighSpeed = false;
-				break;
-			default:
-				isHighSpeed = true;
-				break;
+		if (tipo_conexao == 'Unknown connection' || tipo_conexao == 'Cell 2G connection') {
+			isHighSpeed = false;
+		} else {
+			isHighSpeed = true;
 		}
+
 	}
 }
 		
@@ -148,6 +162,7 @@ function clearCache() {
 	        clearCache();
 	        retries = 0;
 	        //navigator.notification.alert('Concluido! A foto foi enviada para nosso servidor!', alertDismissed, 'Enviar Foto', 'OK');
+			navigator.vibrate(2000);
 			navigator.notification.confirm( 'Concluido! A foto foi enviada para nosso servidor! Deseja enviar outra foto?', AlertConfirmed, 'Enviar Foto', ['OK', 'SAIR']);
 			//$.mobile.changePage("#main");
 	    }
@@ -176,6 +191,8 @@ function clearCache() {
 		
 		var params = new Object();
         params.email = email_aplicativo;
+		params.latitude = latitude;
+		params.longitude = longitude;
         
 	    //options.params = {}; // if we need to send parameters to the server request
 		options.params = params;
@@ -192,6 +209,7 @@ function clearCache() {
 	}
 	 
 	function onFail(message) {
+		navigator.vibrate(2000);
 	    navigator.notification.alert('Ocorreu o seguinte erro: ' + message, alertDismissed, 'Enviar Foto', 'OK');
 	}
 	
@@ -226,13 +244,36 @@ function clearCache() {
 	$(document).on('pageshow', '#foto', function(){
 		if (isPhoneGapReady){
 			if (isConnected) {
+				//obter posicao
+				var options = {
+				maximumAge: 3000,
+				timeout: 5000,
+				enableHighAccuracy: true
+				};
+				navigator.geolocation.getCurrentPosition(ObterCoordenadas, geoError, options);
+				
+				
 				capturePhoto();
 			} else {
+				navigator.vibrate(2000);
 				navigator.notification.alert('Não existe conexão com a Internet', alertDismissed, 'Enviar Foto', 'OK');
 				$.mobile.changePage("#main");
 			}				
 		} else {
+			navigator.vibrate(2000);
 			navigator.notification.alert('O aplicativo não está pronto!', alertDismissed, 'Enviar Foto', 'OK');
 			$.mobile.changePage("#main");
 		}
 	});
+	
+	//Retornar coordenadas
+	function ObterCoordenadas(position) {
+		latitude = position.coords.latitude
+		longitude = position.coords.longitude;
+	}
+		
+	function geoError(error) {
+		//Nao fazer nada, as coordenadas sao opcionais
+		//alert('codigo: ' + error.code + '\n' + 'mensagem: ' + error.message + '\n');
+	}
+	
