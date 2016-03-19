@@ -193,9 +193,7 @@ function clearCache() {
         params.email = email_aplicativo;
 		params.latitude = latitude;
 		params.longitude = longitude;
-		alert(email_aplicativo);
-		alert(latitude);
-        
+		 
 	    //options.params = {}; // if we need to send parameters to the server request
 		options.params = params;
 		
@@ -270,14 +268,12 @@ function clearCache() {
 	
 	//Retornar coordenadas
 	function ObterCoordenadas(position) {
-		alert("coordenadas");
-		alert(position.coords.latitude);
 		latitude = position.coords.latitude;
 		longitude = position.coords.longitude;
 	}
 		
 	function geoError(error) {
 		//Nao fazer nada, as coordenadas sao opcionais
-		alert('codigo: ' + error.code + '\n' + 'mensagem: ' + error.message + '\n');
+		//alert('codigo: ' + error.code + '\n' + 'mensagem: ' + error.message + '\n');
 	}
 	
