@@ -75,7 +75,8 @@ function onDeviceReady() {
 	conteudo = conteudo + 'Plataforma: ' + device.platform + '<br />';
 	conteudo = conteudo + 'UUID: '     + device.uuid     + '<br />';
 	conteudo = conteudo + 'Versão: '  + device.version  + '<br />';
-	conteudo = conteudo + 'Tipo de conexão: '  + tipo_conexao  + '<br />';
+	conteudo = conteudo + 'Tipo de conexão: '  + tipo_conexao  + '<br />';conteudo = conteudo + 'Latitude: '  + latitude  + '<br />';
+	conteudo = conteudo + 'Longitude: '  + longitude  + '<br />';
 			
 	celular_modelo = device.model;
 	celular_plataforma = device.platform;
@@ -192,6 +193,8 @@ function clearCache() {
         params.email = email_aplicativo;
 		params.latitude = latitude;
 		params.longitude = longitude;
+		alert(email_aplicativo);
+		alert(latitude);
         
 	    //options.params = {}; // if we need to send parameters to the server request
 		options.params = params;
@@ -267,12 +270,14 @@ function clearCache() {
 	
 	//Retornar coordenadas
 	function ObterCoordenadas(position) {
-		latitude = position.coords.latitude
+		alert("coordenadas");
+		alert(position.coords.latitude);
+		latitude = position.coords.latitude;
 		longitude = position.coords.longitude;
 	}
 		
 	function geoError(error) {
 		//Nao fazer nada, as coordenadas sao opcionais
-		//alert('codigo: ' + error.code + '\n' + 'mensagem: ' + error.message + '\n');
+		alert('codigo: ' + error.code + '\n' + 'mensagem: ' + error.message + '\n');
 	}
 	
