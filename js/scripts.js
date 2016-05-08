@@ -61,7 +61,7 @@ function echeck(str) {
 document.addEventListener("deviceready", onDeviceReady, false);
 	 
 function onDeviceReady() {
-    pictureSource = navigator.camera.PictureSourceType;
+	pictureSource = navigator.camera.PictureSourceType;
     destinationType = navigator.camera.DestinationType;
 	isPhoneGapReady = true;
 	// detect for network access
@@ -198,7 +198,7 @@ function clearCache() {
 		options.params = params;
 		
 	    var ft = new FileTransfer();
-	    ft.upload(fileURI, encodeURI("http://www.gotasdecidadania.com.br/novo/programado/upload_foto.php"), win, fail, options);
+	    ft.upload(fileURI, encodeURI("http://www.dbins.com.br/ferramentas/upload/upload_foto.php"), win, fail, options);
 	}
 	 
 	function capturePhoto() {
@@ -215,26 +215,40 @@ function clearCache() {
 	
 	$(document).on('pageinit', '#pageone', function(){ 
 		$(document).on('click', '#enviar_contato', function() { // catch the form's submit event
-		
-			var continuar = true;
-			var mensagem ="Ocorreram os seguintes erros:\n";
-			
-			if ($('#email_contato').val() == "") {
-				mensagem = mensagem +  'Digite o endereco de e-mail\n';
-				continuar = false;
-			} else {
-				if (echeck($('#email_contato').val())==false){
-				mensagem = mensagem + 'Preencha corretamente o endereco de e-mail\n';
-				continuar = false;
-				}
-			}
+			if (isPhoneGapReady){
+				if (isConnected) {
+					var continuar = true;
+					var mensagem ="Ocorreram os seguintes erros:\n";
+					
+					if ($('#email_contato').val() == "") {
+						mensagem = mensagem +  'Digite o endereco de e-mail\n';
+						continuar = false;
+					} else {
+						if (echeck($('#email_contato').val())==false){
+						mensagem = mensagem + 'Preencha corretamente o endereco de e-mail\n';
+						continuar = false;
+						}
+					}
 
-			if (continuar){
-				email_aplicativo = $('#email_contato').val();
-				$.mobile.changePage("#foto");
+					if (continuar){
+						email_aplicativo = $('#email_contato').val();
+						$.mobile.changePage("#foto");
+					} else {
+						navigator.notification.alert(mensagem, alertDismissed, 'Enviar Foto', 'OK');
+					}
+				
+				} else {
+					navigator.vibrate(2000);
+					navigator.notification.alert('Não existe conexão com a Internet', alertDismissed, 'Enviar Foto', 'OK');
+					$.mobile.changePage("#main");
+				}				
 			} else {
-				alert(mensagem);
+				navigator.vibrate(2000);
+				navigator.notification.alert('O aplicativo não está pronto!', alertDismissed, 'Enviar Foto', 'OK');
+				$.mobile.changePage("#main");
 			}
+			
+			
 			return false; // cancel original event to prevent form submitting
 	 
 		});
